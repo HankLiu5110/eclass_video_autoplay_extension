@@ -196,10 +196,22 @@ async function findAndClickNextVideo() {
       if (!isIncomplete) continue;
 
       // Check if locked
-      const isLocked = !!activity.querySelector('.font-thin-lock, .fa-lock');
+      const isLocked = !!activity.querySelector('.font-syllabus-lock, .font-thin-lock, .fa-lock, .locked');
       if (isLocked) {
         const titleEl = activity.querySelector('a.title, .title');
-        log('warn', `跳過（鎖定）：${titleEl ? titleEl.textContent.trim() : '未知影片'}`);
+        log('warn', `跳過（鎖定）：${titleEl ? titleEl.textContent.trim() : '未知項目'}`);
+        continue;
+      }
+
+      // Check if it's a video type (skip materials, homeworks, etc.)
+      const isVideoType = !!activity.querySelector(
+        '[ng-switch-when="online_video"], [ng-switch-when="lesson"], [ng-switch-when="lesson_replay"], ' +
+        '.font-syllabus-online-video, .font-syllabus-lesson, .font-syllabus-lesson-replay'
+      );
+      
+      if (!isVideoType) {
+        const titleEl = activity.querySelector('a.title, .title');
+        log('info', `跳過（非影片類型）：${titleEl ? titleEl.textContent.trim() : '未知項目'}`);
         continue;
       }
 
