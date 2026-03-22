@@ -231,7 +231,7 @@ async function findAndClickNextVideo() {
 async function goToNextPage() {
   // Selector for next-page button
   const nextPageBtn = document.querySelector(
-    'li.next-page-button a.pager-button, .pager .next:not(.disabled) a, [data-action="next"]:not(.disabled)'
+    'li.next-page a.pager-button, li.next-page-button a.pager-button, .pager .next:not(.disabled) a, [data-action="next"]:not(.disabled)'
   );
 
   if (!nextPageBtn) {
@@ -240,13 +240,19 @@ async function goToNextPage() {
   }
 
   const parentLi = nextPageBtn.closest('li');
+  const isHidden = 
+    (parentLi && parentLi.classList.contains('ng-hide')) || 
+    nextPageBtn.classList.contains('ng-hide') ||
+    (parentLi && parentLi.style.display === 'none') ||
+    nextPageBtn.style.display === 'none';
+
   const isDisabled =
     nextPageBtn.classList.contains('disabled') ||
     (parentLi && parentLi.classList.contains('disabled')) ||
     nextPageBtn.getAttribute('aria-disabled') === 'true';
 
-  if (isDisabled) {
-    log('done', '下一頁按鈕已禁用，沒有更多未完成影片。');
+  if (isDisabled || isHidden) {
+    log('done', '下一頁按鈕已無法點擊（最後一頁），沒有更多影片。');
     return 'done';
   }
 
