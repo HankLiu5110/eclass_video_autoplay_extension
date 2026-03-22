@@ -29,13 +29,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return false;
   }
 
-  if (message.action === 'statusUpdate') {
-    // Forward status from content script → popup
-    chrome.runtime.sendMessage({ action: 'statusUpdate', status: message.status }).catch(() => {
-      // Popup may be closed, ignore
-    });
-    return false;
-  }
+
 });
 
 // When a tab navigates within eClass, keep tracking it

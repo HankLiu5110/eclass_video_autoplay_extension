@@ -102,9 +102,11 @@ function setRunningState(running) {
 }
 
 function setStatus(text, type = 'idle') {
-  statusText.textContent = text;
+  statusText.textContent = text || '';
   statusDot.className = 'status-dot';
-  if (type === 'active')  statusDot.classList.add('active');
+  if (type === 'active' || type === 'info' || type === 'warn') {
+    statusDot.classList.add('active'); // 保持綠燈閃爍
+  }
   if (type === 'done')    statusDot.classList.add('done');
   if (type === 'error')   statusDot.classList.add('error');
 }

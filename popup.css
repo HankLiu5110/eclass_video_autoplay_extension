@@ -90,6 +90,7 @@ body {
 
 input[type="range"] {
   -webkit-appearance: none;
+  appearance: none;
   flex: 1;
   height: 4px;
   border-radius: 2px;
