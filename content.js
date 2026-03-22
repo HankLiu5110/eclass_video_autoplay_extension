@@ -31,9 +31,9 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       return false;
     }
     PLAYBACK_SPEED   = message.speed || 2.0;
-    stopRequested    = false;
     isRunning        = true;
     coursewareBaseUrl = window.location.href;
+    chrome.storage.local.set({ autoState: 'scanning', coursewareBaseUrl });
     log('info', `開始自動播放（速度 ${PLAYBACK_SPEED}x）`);
     mainLoop();
     sendResponse({ ok: true });
@@ -138,7 +138,7 @@ async function mainLoop() {
     const result = await findAndClickNextVideo();
 
     if (result === 'clicked') {
-      // Wait for the new page/content to load
+      // If no page reload (SPA behavior), we wait and continue
       await sleep(3000);
       await watchVideoAndHandleType();
 
@@ -146,13 +146,12 @@ async function mainLoop() {
 
       // Navigate back to course list
       log('info', '返回課程清單...');
+      chrome.storage.local.set({ autoState: 'scanning' });
       if (coursewareBaseUrl) {
         window.location.href = coursewareBaseUrl;
       } else {
         window.history.back();
       }
-      // Wait for page to reload (content script re-injects, but we need to
-      // handle the case where SPA navigation doesn't reload the script)
       await sleep(4000);
 
     } else if (result === 'done') {
@@ -222,6 +221,7 @@ async function findAndClickNextVideo() {
 
       const clickable = activity.querySelector('.clickable-area, a.title');
       if (clickable) {
+        chrome.storage.local.set({ autoState: 'watching' });
         clickable.click();
         return 'clicked';
       }
@@ -537,14 +537,34 @@ function parseDurationString(str) {
 // ═══════════════════════════════════════════════════════════
 //  Init: auto-resume if flag is set in storage
 // ═══════════════════════════════════════════════════════════
-chrome.storage.local.get({ isRunning: false, playbackSpeed: 2.0 }, (data) => {
+async function resumeWatchingLoop() {
+  await watchVideoAndHandleType();
+  if (!isRunning || stopRequested) return;
+
+  log('info', '影片結束，返回課程清單...');
+  chrome.storage.local.set({ autoState: 'scanning' });
+  if (coursewareBaseUrl) {
+    window.location.href = coursewareBaseUrl;
+  } else {
+    window.history.back();
+  }
+}
+
+chrome.storage.local.get({ isRunning: false, playbackSpeed: 2.0, autoState: 'scanning', coursewareBaseUrl: null }, (data) => {
   if (data.isRunning && !isRunning) {
-    PLAYBACK_SPEED   = data.playbackSpeed;
-    isRunning        = true;
-    stopRequested    = false;
-    coursewareBaseUrl = window.location.href;
-    log('info', `頁面重載後自動繼續（速度 ${PLAYBACK_SPEED}x）...`);
-    // Small delay to let page fully settle
-    safeSetTimeout(() => mainLoop(), 2000);
+    PLAYBACK_SPEED    = data.playbackSpeed;
+    isRunning         = true;
+    stopRequested     = false;
+    coursewareBaseUrl = data.coursewareBaseUrl || window.location.href;
+    
+    log('info', `頁面重載後自動繼續（速度 ${PLAYBACK_SPEED}x，狀態：${data.autoState === 'watching' ? '觀看中' : '掃描中'}）...`);
+    
+    safeSetTimeout(() => {
+      if (data.autoState === 'watching') {
+        resumeWatchingLoop();
+      } else {
+        mainLoop();
+      }
+    }, 2000);
   }
 });
