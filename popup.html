@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>eClass 自動播放助手</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="14" cy="14" r="13" stroke="url(#grad)" stroke-width="2"/>
+          <polygon points="11,9 11,19 21,14" fill="url(#grad)"/>
+          <defs>
+            <linearGradient id="grad" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#6ee7f7"/>
+              <stop offset="100%" stop-color="#a78bfa"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <div class="title-block">
+        <h1>eClass 自動播放</h1>
+        <span class="subtitle">yuntech.edu.tw</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <label class="speed-label">
+        播放速度
+        <span id="speedValue" class="speed-badge">2.0x</span>
+      </label>
+      <div class="slider-track">
+        <span class="slider-min">1×</span>
+        <input type="range" id="speedSlider" min="1.0" max="4.0" step="0.25" value="2.0" />
+        <span class="slider-max">4×</span>
+      </div>
+    </div>
+
+    <div class="status-card">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">待機中</span>
+    </div>
+
+    <div class="log-box" id="logBox">
+      <div class="log-placeholder">日誌將在此顯示...</div>
+    </div>
+
+    <div class="btn-row">
+      <button id="startBtn" class="btn btn-start">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <polygon points="4,3 4,13 14,8" fill="currentColor"/>
+        </svg>
+        開始自動播放
+      </button>
+      <button id="stopBtn" class="btn btn-stop" disabled>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="3" y="3" width="4" height="10" rx="1" fill="currentColor"/>
+          <rect x="9" y="3" width="4" height="10" rx="1" fill="currentColor"/>
+        </svg>
+        停止
+      </button>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
