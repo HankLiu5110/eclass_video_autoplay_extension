@@ -10,6 +10,7 @@ const stopBtn     = document.getElementById('stopBtn');
 const statusDot   = document.getElementById('statusDot');
 const statusText  = document.getElementById('statusText');
 const logBox      = document.getElementById('logBox');
+const speedWarning= document.getElementById('speedWarning');
 
 let isRunning = false;
 
@@ -17,6 +18,13 @@ let isRunning = false;
 chrome.storage.local.get({ playbackSpeed: 2.0, isRunning: false }, (data) => {
   speedSlider.value = data.playbackSpeed;
   speedValue.textContent = `${parseFloat(data.playbackSpeed).toFixed(2).replace(/\.?0+$/, '')}x`;
+  
+  if (data.playbackSpeed > 2.0) {
+    speedWarning.classList.remove('hidden');
+  } else {
+    speedWarning.classList.add('hidden');
+  }
+
   if (data.isRunning) {
     setRunningState(true);
   }
@@ -28,6 +36,12 @@ speedSlider.addEventListener('input', () => {
   const display = val % 1 === 0 ? `${val}.0x` : `${val}x`;
   speedValue.textContent = display;
   chrome.storage.local.set({ playbackSpeed: val });
+
+  if (val > 2.0) {
+    speedWarning.classList.remove('hidden');
+  } else {
+    speedWarning.classList.add('hidden');
+  }
 });
 
 // ── Start button ─────────────────────────────────────────────────────

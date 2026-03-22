@@ -115,6 +115,22 @@ input[type="range"]::-webkit-slider-thumb:hover {
   transform: scale(1.2);
 }
 
+.speed-warning {
+  margin-top: 10px;
+  font-size: 11px;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  border-radius: 6px;
+  padding: 6px 8px;
+  text-align: center;
+  transition: opacity 0.3s, margin-top 0.3s, height 0.3s;
+}
+
+.speed-warning.hidden {
+  display: none;
+}
+
 /* ── Status ── */
 .status-card {
   display: flex;
