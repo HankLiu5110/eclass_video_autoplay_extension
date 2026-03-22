@@ -16,13 +16,13 @@
 
 ## 安裝方法（開發者模式）
 
-1. 下載或 Clone 此專案至本機資料夾（例如 `eclass_video_extension`）。
+1. 下載或 Clone 此專案至本機資料夾（例如 `eclass_video_autoplay_extension`）。
 2. 開啟 Chrome，在網址列輸入：
    ```
    chrome://extensions/
    ```
 3. 開啟右上角的「**開發者模式**」開關。
-4. 點擊「**載入未封裝項目**」，選擇 `eclass_video_extension` 資料夾。
+4. 點擊「**載入未封裝項目**」，選擇 `eclass_video_autoplay_extension` 資料夾。
 5. 擴充功能圖示會出現在 Chrome 工具列。
 
 ---
@@ -46,7 +46,7 @@
 ## 檔案結構
 
 ```
-eclass_video_extension/
+eclass_video_autoplay_extension/
 ├── manifest.json       # MV3 擴充功能設定
 ├── background.js       # Service Worker（訊息中繼）
 ├── content.js          # 主要自動化邏輯（注入頁面）
