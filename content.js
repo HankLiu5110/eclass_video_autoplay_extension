@@ -548,6 +548,13 @@ async function resumeWatchingLoop() {
   } else {
     window.history.back();
   }
+  
+  // 若返回清單只觸發了 SPA (單頁應用) 的 Hash 改變而沒有整頁重載，
+  // 原有的程式需要繼續呼叫 mainLoop() 才能接續往下掃描。
+  await sleep(4000);
+  if (isRunning && !stopRequested) {
+    mainLoop();
+  }
 }
 
 chrome.storage.local.get({ isRunning: false, playbackSpeed: 2.0, autoState: 'scanning', coursewareBaseUrl: null }, (data) => {
