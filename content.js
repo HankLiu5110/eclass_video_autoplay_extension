@@ -399,7 +399,7 @@ async function playEclassVideo(playBtnSelector, videoSelector) {
     }, estimatedMs);
   });
 
-  log('done', '影片播放完畢。');
+  log('info', '影片播放完畢。');
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -510,7 +510,7 @@ async function playYouTubeVideo() {
 
   clearInterval(infoInterval);
   window.removeEventListener('message', messageHandler);
-  log('done', 'YouTube 影片播放完畢。');
+  log('info', 'YouTube 影片播放完畢。');
 }
 
 // ═══════════════════════════════════════════════════════════
